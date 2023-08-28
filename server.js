@@ -8,7 +8,7 @@ const passportSetup = require("./config/passportAuth");
 const cookieSession = require("cookie-session");
 //Do the login/logout
 const app = express();
-const githubts = false;
+
 app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + "/public"));
 
@@ -21,14 +21,22 @@ app.use(
     keys: [process.env.COOKIE_SESSION_KEY],
   })
 );
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 const port = process.env.PORT;
 
 //ROUTES
+
+const authCheck = (req, res, next) => {
+  if (!req.user) {
+    res.redirect("/login");
+  }
+  next();
+};
 
 app.get(
   "/auth/google",
@@ -36,20 +44,28 @@ app.get(
     scope: ["profile"],
   })
 );
-app.get("/auth/google/redirect", (req, res) => {
-  res.redirect("/");
-});
+app.get(
+  "/auth/google/redirect",
+  passport.authenticate("google"),
+  (req, res) => {
+    // res.redirect("/", { user: req.user });
+    res.send(req.user);
+  }
+);
 
-app.get("/", (req, res) => {
-  res.render("index.ejs", { user: req.user });
-});
+// app.get("/", authCheck, (req, res) => {
+//   res.render("index.ejs", { user: req.user });
+// });
 
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
+app.get("/", (req, res) => {
+  res.render("index.ejs");
+});
 
 app.get("/logout", (req, res) => {
-  console.log(req.user);
+  req.logout();
   res.redirect("/");
 });
 
