@@ -1,0 +1,103 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: url(../img/blurry-gradient-haikei.svg) no-repeat center center
+    fixed;
+  background-size: cover;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  display: flex;
+
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  vertical-align: middle;
+  margin-top: 2%;
+}
+
+label {
+  margin-top: 1.8rem;
+
+  color: white;
+}
+
+.box {
+  color: white;
+
+  background-color: white;
+
+  height: 2.5rem;
+}
+
+input {
+  color: grey;
+}
+
+::placeholder {
+  /* Most modern browsers support this now. */
+  color: grey;
+  font-size: 1rem;
+}
+
+h2,
+h3 {
+  color: white;
+}
+
+h2 {
+  display: flex;
+
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+.submit-btn {
+  display: flex;
+  justify-content: center;
+  background-color: rgb(222, 237, 241);
+  margin-top: 2rem;
+  font-weight: 2rem;
+  height: 2.5rem;
+  width: auto;
+  color: rgb(0, 0, 0);
+  font-size: 1.3rem;
+
+  /* margin-left: 1.95rem; */
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.submit-btn:hover {
+  cursor: pointer;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+  color: grey;
+  margin-top: 0.8rem;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  margin-left: 0.2rem;
+}

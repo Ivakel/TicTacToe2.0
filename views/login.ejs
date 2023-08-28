@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="../img/icon3.jpg" />
+    <link href="/css/login.css" rel="stylesheet" type="text/css" />
+    <title>Tic-Tac Toe | login</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="welcome-text">
+        <h2>Welcome back</h2>
+        <h3>Have fun playing Tic-Tac Toe</h3>
+      </div>
+      <button
+        type="button"
+        class="google-login"
+        onclick="location.href = '/auth/google';"
+      >
+        <p>LOGIN WITH</p>
+        <img src="../img/google-logo-full.svg" alt="" />
+      </button>
+
+      <p class="or">OR</p>
+      <hr />
+      <form action="/login" method="POST">
+        <label for="email"> Email </label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="user@email.com"
+          class="box"
+        />
+        <label for="password"> Password</label>
+        <input
+          type="text"
+          name="password"
+          id="password"
+          placeholder="********"
+          class="box"
+        />
+        <input
+          class="submit-btn"
+          type="submit"
+          id="submit"
+          value="Submit"
+          onclick="submit(this)"
+        />
+      </form>
+      <p class="login">Don't have an account? <a href="signup">Signup</a></p>
+    </div>
+  </body>
+</html>

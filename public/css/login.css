@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@700&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: url(../img/blurry-gradient-haikei.svg) no-repeat center center
+    fixed;
+  background-size: cover;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+  display: flex;
+
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.welcome-text {
+  font-size: 1.2rem;
+}
+
+h2 {
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+  border: none;
+  border-radius: 5px;
+  height: 2.5rem;
+  /* vertical-align: middle; */
+  align-items: center;
+  background-color: #133568;
+  padding-bottom: 0.7rem;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+button img {
+  height: 3rem;
+  margin-left: 0.2rem;
+  margin-top: 0.7rem;
+}
+
+hr {
+  margin-top: 1rem;
+  color: #3a5b8d;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 3%;
+}
+
+.box {
+  /* color: white;
+
+  background-color: white; */
+
+  height: 2.5rem;
+  background-color: #96b1da;
+  margin-bottom: 1.2rem;
+}
+
+::placeholder {
+  /* Most modern browsers support this now. */
+  color: rgb(56, 56, 56);
+  font-size: 1rem;
+}
+
+h2,
+h3 {
+  color: white;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+
+  font-size: 1.3rem;
+}
+
+label {
+  margin-top: 1rem;
+  color: white;
+}
+/* input {
+  background-color: #3a5b8d;
+  margin-bottom: 1.2rem;
+  color: grey;
+} */
+
+.submit-btn {
+  display: flex;
+  justify-content: center;
+  background-color: rgb(222, 237, 241);
+  margin-top: 2rem;
+  font-weight: 2rem;
+  height: 2.5rem;
+  width: auto;
+  color: rgb(0, 0, 0);
+  font-size: 1.3rem;
+
+  /* margin-left: 1.95rem; */
+}
+
+.submit-btn:hover {
+  cursor: pointer;
+}
+
+p {
+  display: flex;
+  justify-content: center;
+  color: grey;
+  margin-top: 0.8rem;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+  margin-left: 0.2rem;
+}

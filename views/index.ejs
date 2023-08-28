@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/main.css" type="text/css" />
+    <link rel="icon" type="image/x-icon" href="../img/icon3.jpg" />
+    <title>Tic-Tac Toe</title>
+  </head>
+  <body>
+    <div class="header">
+      <button type="button" class="logging" onclick="location.href = '/login';">
+        <% if (user) {%> Logout <%}else {%> login <%}%>
+      </button>
+      <a href="#">
+        <div class="username"></div>
+        <div class="profile-icon">
+          <img src="../img/profile-svgrepo-com.svg" alt="" /></div
+      ></a>
+    </div>
+    <div class="container">
+      <div class="title">TIC-TAC TOE</div>
+      <div class="announcer">
+        <div class="winnner">
+          <img src="img/circle.png" class="winner-img" />
+        </div>
+        <h2 class="message"></h2>
+        <div class="btn-replay">
+          <button class="replay" id="replay" onclick="replay()">REPLAY</button>
+        </div>
+      </div>
+      <div class="wrapper">
+        <button class="s11" id="square" onclick="myFunction(this)"></button>
+        <button class="s12" id="square" onclick="myFunction(this)"></button>
+        <button class="s13" id="square" onclick="myFunction(this)"></button>
+        <button class="s21" id="square" onclick="myFunction(this)"></button>
+        <button class="s22" id="square" onclick="myFunction(this)"></button>
+        <button class="s23" id="square" onclick="myFunction(this)"></button>
+        <button class="s31" id="square" onclick="myFunction(this)"></button>
+        <button class="s32" id="square" onclick="myFunction(this)"></button>
+        <button class="s33" id="square" onclick="myFunction(this)"></button>
+      </div>
+    </div>
+  </body>
+  <script src="main.js"></script>
+</html>
