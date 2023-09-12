@@ -99,11 +99,14 @@ label {
   margin-top: 1rem;
   color: white;
 }
-/* input {
-  background-color: #3a5b8d;
-  margin-bottom: 1.2rem;
-  color: grey;
-} */
+input {
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  font-size: 1rem;
+  padding-left: 0.7rem;
+  border: 1px solid black;
+  border-radius: 5px;
+}
 
 .submit-btn {
   display: flex;

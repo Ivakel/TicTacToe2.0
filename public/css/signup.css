@@ -46,14 +46,19 @@ label {
 }
 
 input {
-  color: grey;
+  color: #000000;
+  background-color: rgb(255, 255, 255);
+  font-size: 1rem;
+  padding-left: 0.7rem;
+  border: 1px solid black;
+  border-radius: 5px;
 }
 
-::placeholder {
-  /* Most modern browsers support this now. */
-  color: grey;
+/* ::placeholder {
+  
+  color: rgb(255, 255, 255);
   font-size: 1rem;
-}
+} */
 
 h2,
 h3 {

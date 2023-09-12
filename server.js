@@ -6,6 +6,9 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const passportSetup = require("./config/passportAuth");
 const cookieSession = require("cookie-session");
+const initialisePassport = require("./config/passportLocal");
+const flash = require("express-flash");
+const session = require("express-session");
 //Do the login/logout
 const app = express();
 
@@ -31,13 +34,6 @@ const port = process.env.PORT;
 
 //ROUTES
 
-const authCheck = (req, res, next) => {
-  if (!req.user) {
-    res.redirect("/login");
-  }
-  next();
-};
-
 app.get(
   "/auth/google",
   passport.authenticate("google", {
@@ -48,8 +44,7 @@ app.get(
   "/auth/google/redirect",
   passport.authenticate("google"),
   (req, res) => {
-    // res.redirect("/", { user: req.user });
-    res.send(req.user);
+    res.render("/", { user: req.user });
   }
 );
 
@@ -57,11 +52,8 @@ app.get(
 //   res.render("index.ejs", { user: req.user });
 // });
 
-app.get("/login", (req, res) => {
-  res.render("login.ejs");
-});
 app.get("/", (req, res) => {
-  res.render("index.ejs");
+  res.render("index.ejs", { user: req.user });
 });
 
 app.get("/logout", (req, res) => {
@@ -70,47 +62,56 @@ app.get("/logout", (req, res) => {
 });
 
 //signup server
-app.get("/signup", (req, res) => {
+app.get("/auth/signup", (req, res) => {
   res.render("signup.ejs");
 });
+app.get("/auth/login", (req, res) => {
+  res.render("login.ejs");
+});
 
-app.post("/login", async (req, res) => {
+//signup authentication
+app.post(
+  "/auth/login",
+  passport.authenticate("local", {
+    successRedirect: "/",
+    failureMessage: "/auth/signup",
+  })
+);
+
+app.post("/auth/signup", async (req, res) => {
+  const email = req.body.email;
+  const username = req.body.username;
+  const password = req.body.password;
+  const hashedPW = await bcrypt(password, 10);
+
   try {
-    const email = req.body.email;
-    const password = req.body.password;
-    const user = await User.findOne({ email: email });
-
-    if (user) {
-      // the user succesfully logedin
-      res.redirect("/");
-    } else {
-      console.log("user not found");
-    }
+    new User({
+      username: username,
+      email: email,
+      password: hashedPW,
+    }).save();
+    res.redirect("/auth/login");
   } catch (error) {
-    // res.json({ message: error.message });
-    res.json({ message: error.message });
+    res.send(error);
   }
 });
 
-app.post("/signup", async (req, res) => {
-  try {
-    let email_ = req.body.email;
-    let username_ = req.body.username;
-    let password_ = await bcrypt.hash(req.body.password, 10);
-
-    const userData = {
-      email: email_,
-      username: username_,
-      password: password_,
-    };
-    const user = await User.create(userData);
-    res.status(200).json(users);
-    res.redirect("/login");
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ message: error.message });
+//useful functions for middleware
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    res.redirect("/auth/signup");
   }
-});
+}
+
+function checkNotAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    res.redirect("/");
+  } else {
+    next();
+  }
+}
 
 mongoose.set("strictQuery", false);
 mongoose

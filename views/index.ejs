@@ -9,9 +9,21 @@
   </head>
   <body>
     <div class="header">
-      <button type="button" class="logging" onclick="location.href = '/login';">
-        login
-      </button>
+      <div class="logging">
+        <%if (user) {%>
+        <form action="/logout?_method=DELETE" method="post">
+          <button type="submit">logout</button>
+        </form>
+        <%} else{%>
+        <button
+          type="button"
+          class="logging"
+          onclick="location.href = '/auth/login';"
+        >
+          login
+        </button>
+        <%}%>
+      </div>
       <a href="#">
         <div class="profile-icon">
           <img src="../img/profile-svgrepo-com.svg" alt="" /></div
