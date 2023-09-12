@@ -9,10 +9,10 @@
   </head>
   <body>
     <div class="header">
-      <div class="logging">
+      <div>
         <%if (user) {%>
         <form action="/logout?_method=DELETE" method="post">
-          <button type="submit">logout</button>
+          <button type="submit" class="logging">logout</button>
         </form>
         <%} else{%>
         <button

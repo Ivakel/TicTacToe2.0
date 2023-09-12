@@ -9,7 +9,7 @@ function initialise(passport) {
       if (!existingUser) {
         //cookie save
 
-        return done(null, false, { message: "Password incorrect!" });
+        return done(null, false, { message: "User not found!" });
       } else {
         try {
           if (await bcrypt.compare(password, existingUser.password)) {

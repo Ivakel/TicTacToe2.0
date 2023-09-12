@@ -9,6 +9,12 @@ const cookieSession = require("cookie-session");
 const initialisePassport = require("./config/passportLocal");
 const flash = require("express-flash");
 const session = require("express-session");
+const io = require("socket.io")(5001, {
+  cors: {
+    origin: ["http://localhost:8080"],
+  },
+});
+
 //Do the login/logout
 const app = express();
 
@@ -18,14 +24,24 @@ app.use(express.static(__dirname + "/public"));
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "ejs");
 
+// app.use(
+//   cookieSession({
+//     maxAge: 24 * 60 * 60 * 1000,
+//     keys: [process.env.COOKIE_SESSION_KEY],
+//   })
+// );
+
 app.use(
-  cookieSession({
-    maxAge: 24 * 60 * 60 * 1000,
-    keys: [process.env.COOKIE_SESSION_KEY],
+  session({
+    secret: process.env.COOKIE_SESSION_KEY,
+    resave: false,
+    saveInitialised: false,
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
+initialisePassport(passport);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -53,6 +69,11 @@ app.get(
 // });
 
 app.get("/", (req, res) => {
+  if (req.user) {
+    io.on("connection", (socket) => {
+      console.log(socket.id);
+    });
+  }
   res.render("index.ejs", { user: req.user });
 });
 
