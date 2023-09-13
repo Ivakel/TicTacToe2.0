@@ -102,7 +102,7 @@ body {
   grid-template-columns: repeat(3, 7rem);
   grid-template-rows: repeat(3, 7rem);
   justify-content: center;
-  margin-top: 5%;
+  margin-top: 3%;
   gap: 5px;
   background-color: rgba(0, 0, 0, 0.726);
   width: 21rem;

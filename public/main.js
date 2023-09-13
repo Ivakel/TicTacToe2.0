@@ -1,6 +1,9 @@
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5001");
+// const socket = io("http://localhost:5001");
+// socket.on("connect", () => {
+//   console.log(`connected to socket ${socket.id}`);
+// });
 
 let game = [
   [".", ".", "."],
@@ -9,6 +12,7 @@ let game = [
 ];
 
 const whichPlayer = { 0: "O", 1: "X" };
+let multiplayer = false;
 
 const coOrds = {
   ".s11": [0, 0],
