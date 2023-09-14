@@ -51,7 +51,29 @@
         <button class="s32" id="square" onclick="myFunction(this)"></button>
         <button class="s33" id="square" onclick="myFunction(this)"></button>
       </div>
+      <div class="invite-poppup">
+        <p class="invite-txt">Invite a friend</p>
+        <label for="username" class="invite-username">Username</label>
+        <div class="invite-box">
+          <input type="text" class="username-box" />
+          <button
+            type="button"
+            class="invite-btn"
+            id="invite-btn"
+            onclick="invitePlayer()"
+          >
+            invite
+          </button>
+        </div>
+      </div>
     </div>
   </body>
-  <script src="/main.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "socket.io-client": "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
+      }
+    }
+  </script>
+  <script type="module" src="/main.js"></script>
 </html>

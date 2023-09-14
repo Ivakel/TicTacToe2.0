@@ -1,9 +1,9 @@
-// import { io } from "socket.io-client";
+import { io } from "socket.io-client";
 
-// const socket = io("http://localhost:5001");
-// socket.on("connect", () => {
-//   console.log(`connected to socket ${socket.id}`);
-// });
+const socket = io("http://localhost:5001");
+socket.on("connect", () => {
+  console.log(`connected to socket ${socket.id}`);
+});
 
 let game = [
   [".", ".", "."],
