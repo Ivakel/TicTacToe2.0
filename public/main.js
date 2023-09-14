@@ -1,9 +1,18 @@
-import { io } from "socket.io-client";
+async function getter() {
+  const { socket } = await import("./getSocket.js");
+  console.log(socket);
+  socket.on("connect", () => {
+    console.log(`connected to socket ${socket.id}`);
+  });
 
-const socket = io("http://localhost:5001");
-socket.on("connect", () => {
-  console.log(`connected to socket ${socket.id}`);
-});
+  return socket;
+}
+
+getter();
+
+// socket.on("connect", () => {
+//   console.log(`connected to socket ${socket.id}`);
+// });
 
 let game = [
   [".", ".", "."],
