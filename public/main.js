@@ -1,27 +1,6 @@
-async function getter() {
-  const { socket } = await import("./getSocket.js");
-  console.log(socket);
-  socket.on("connect", () => {
-    console.log(`connected to socket ${socket.id}`);
-  });
-
-  return socket;
-}
-
-getter();
-
-// socket.on("connect", () => {
-//   console.log(`connected to socket ${socket.id}`);
-// });
-
-let game = [
-  [".", ".", "."],
-  [".", ".", "."],
-  [".", ".", "."],
-];
-
-const whichPlayer = { 0: "O", 1: "X" };
-let multiplayer = false;
+const io = require("socket.io-client")();
+const User = require("../models/userModel");
+const socket = io("http://localhost:5001");
 
 const coOrds = {
   ".s11": [0, 0],
@@ -41,9 +20,47 @@ const wins = new Set(["ooo", "xxx"]);
 const message = document.querySelector(".message");
 const winner = document.querySelector(".winnner");
 const announcer = document.querySelector(".announcer");
+const whichPlayer = { 0: "O", 1: "X" };
+const playerUsername = document.getElementById("usernameBox");
+const username = document.getElementById("username");
+const usernameFlag = document.querySelector(".username-flag");
+
+//connecting to the socket
+socket.on("connect");
+
+let game = [
+  [".", ".", "."],
+  [".", ".", "."],
+  [".", ".", "."],
+];
+
+let multiplayer = false;
+let canMakeMove = true;
+const player = {
+  sign: "x",
+  move: "",
+};
+//multiplayer
+function invitePlayer() {
+  if (playerUsername.value === "") {
+    return;
+  }
+
+  const user = User.findOne({ email: email });
+  if (!user) {
+    usernameFlag.classList.add("show-flag");
+    return;
+  }
+  if (usernameFlag.classList.has("show-flag")) {
+    usernameFlag.classList.remove("show-flag");
+  }
+
+  socket
+    .to(user.socketId)
+    .emit("user-connection", `You are playing ${username.value}`);
+}
 
 let turn = false;
-
 let gameOn = true;
 let counter = 0;
 //level of the game
@@ -154,8 +171,6 @@ function draw() {
   message.innerHTML = "DRAW";
   announcer.classList.add("show-replay-btn");
 }
-
-//function play() {}
 
 //Computer that plays stupid moves
 function Computer() {
@@ -268,6 +283,26 @@ function getCross2() {
   return str;
 }
 
+function makeMoveOnApp(btn) {
+  const btn = document.querySelector("." + el.className);
+  if (btn.innerHTML === "") {
+    const [a, b] = coOrds["." + el.className];
+
+    if (turn) {
+      game[a][b] = "o";
+      btn.innerHTML = '<img src="img/circle.svg" alt="" />';
+    } else {
+      game[a][b] = "x";
+      btn.innerHTML = '<img src="/img/cross2.png" alt="" class="circle"/>';
+    }
+    counter++;
+    turn = !turn;
+    gameOver();
+    sleep(9000).then(() => {});
+    Computer();
+  }
+}
+
 //Checks if there is a winner
 function gameOver() {
   //check for each row
@@ -304,28 +339,12 @@ function gameOver() {
 }
 
 function makeMove(el) {
-  const btn = document.querySelector("." + el.className);
-
-  if (btn.innerHTML === "") {
-    const [a, b] = coOrds["." + el.className];
-
-    if (turn) {
-      game[a][b] = "o";
-      btn.innerHTML = '<img src="img/circle.svg" alt="" />';
-    } else {
-      game[a][b] = "x";
-      btn.innerHTML = '<img src="/img/cross2.png" alt="" class="circle"/>';
+  if (multiplayer) {
+    if (!makeMove) {
+      return;
     }
-    counter++;
-    turn = !turn;
-    gameOver();
-    sleep(9000).then(() => {});
-    Computer();
   }
-}
-
-function myFunction(el) {
-  makeMove(el);
+  makeMoveOnApp(el);
 }
 
 // Time delay

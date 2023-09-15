@@ -274,3 +274,11 @@ button #square {
   -webkit-box-shadow: 0 0 10px #3f6fb6;
   box-shadow: 0 0 10px #3f6fb6;
 }
+
+.username-flag {
+  color: rgb(221, 100, 100);
+  display: none;
+}
+.show-flag {
+  display: flex;
+}

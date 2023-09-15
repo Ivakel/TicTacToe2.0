@@ -15,6 +15,10 @@ const io = require("socket.io")(5001, {
   },
 });
 
+io.on("connection", (socket) => {
+  console.log(`Connected to ${socket.id}`);
+});
+
 //Do the login/logout
 const app = express();
 
@@ -69,11 +73,6 @@ app.get(
 // });
 
 app.get("/", (req, res) => {
-  if (req.user) {
-    io.on("connection", (socket) => {
-      console.log(socket.id);
-    });
-  }
   res.render("index.ejs", { user: req.user });
 });
 
