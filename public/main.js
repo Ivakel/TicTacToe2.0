@@ -1,7 +1,3 @@
-const io = require("socket.io-client")();
-const User = require("../models/userModel");
-const socket = io("http://localhost:5001");
-
 const coOrds = {
   ".s11": [0, 0],
   ".s12": [0, 1],
@@ -14,19 +10,17 @@ const coOrds = {
   ".s33": [2, 2],
 };
 
-const playerCross = 1;
-const playerCircle = 0;
 const wins = new Set(["ooo", "xxx"]);
 const message = document.querySelector(".message");
 const winner = document.querySelector(".winnner");
 const announcer = document.querySelector(".announcer");
 const whichPlayer = { 0: "O", 1: "X" };
-const playerUsername = document.getElementById("usernameBox");
 const username = document.getElementById("username");
 const usernameFlag = document.querySelector(".username-flag");
-
-//connecting to the socket
-socket.on("connect");
+const spinner = document.querySelector(".spinner");
+const opponentBox = document.querySelector(".opponent");
+const opponentUsernameSpan = document.querySelector(".opp-username");
+const searchBtn = document.getElementById("search-btn");
 
 let game = [
   [".", ".", "."],
@@ -34,37 +28,35 @@ let game = [
   [".", ".", "."],
 ];
 
+let user = null;
 let multiplayer = false;
 let canMakeMove = true;
-const player = {
-  sign: "x",
-  move: "",
-};
-//multiplayer
-function invitePlayer() {
-  if (playerUsername.value === "") {
-    return;
-  }
-
-  const user = User.findOne({ email: email });
-  if (!user) {
-    usernameFlag.classList.add("show-flag");
-    return;
-  }
-  if (usernameFlag.classList.has("show-flag")) {
-    usernameFlag.classList.remove("show-flag");
-  }
-
-  socket
-    .to(user.socketId)
-    .emit("user-connection", `You are playing ${username.value}`);
-}
+let opponent = null;
 
 let turn = false;
 let gameOn = true;
 let counter = 0;
 //level of the game
 let level = 2;
+
+const socket = io("http://localhost:5001");
+
+socket.on("send-opponent", (obj) => {
+  if (obj.socketId !== socket.id) {
+    return;
+  }
+  opponent = obj.opponent;
+  spinner.style.display = "none";
+  opponentBox.style.display = "inline";
+  opponentUsernameSpan.innerHTML = opponent.username;
+  console.log(opponent.socketId);
+  console.log(opponent.username);
+});
+function search() {
+  socket.emit("find", { socketId: socket.id, username: username.innerText });
+  spinner.style.display = "inline";
+  searchBtn.style.display = "none";
+}
 
 function miniMax(currGame, depth, turn) {
   let moves = getAvailMoves();
@@ -283,7 +275,7 @@ function getCross2() {
   return str;
 }
 
-function makeMoveOnApp(btn) {
+function makeMoveOnApp(el) {
   const btn = document.querySelector("." + el.className);
   if (btn.innerHTML === "") {
     const [a, b] = coOrds["." + el.className];
@@ -340,7 +332,7 @@ function gameOver() {
 
 function makeMove(el) {
   if (multiplayer) {
-    if (!makeMove) {
+    if (!canMakeMove) {
       return;
     }
   }

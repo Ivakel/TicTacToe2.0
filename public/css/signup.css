@@ -38,22 +38,27 @@ label {
 }
 
 .box {
-  color: white;
+  color: rgb(0, 0, 0);
 
   background-color: white;
 
   height: 2.5rem;
 }
 
-input {
+.box {
+  height: 2.5rem;
+  background-color: #96b1da;
+  margin-bottom: 1.2rem;
+}
+
+form input {
   color: #000000;
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(0, 0, 0);
   font-size: 1rem;
   padding-left: 0.7rem;
   border: 1px solid black;
   border-radius: 5px;
 }
-
 /* ::placeholder {
   
   color: rgb(255, 255, 255);

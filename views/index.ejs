@@ -9,22 +9,26 @@
   </head>
   <body>
     <div class="header">
-      <div>
-        <%if (user) {%>
-        <form action="/logout?_method=DELETE" method="post">
-          <button type="submit" class="logging">logout</button>
-        </form>
-        <p class="username" id="username"><%user.username%></p>
-        <%} else{%>
-        <button
-          type="button"
-          class="logging"
-          onclick="location.href = '/auth/login';"
-        >
-          login
-        </button>
-        <%}%>
+      <%if (user) {%>
+      <div class="username" id="username" style="color: white; display: none">
+        <%=user.username%>
       </div>
+      <button
+        type="button"
+        class="logging"
+        onclick="location.href = '/logout';"
+      >
+        logout
+      </button>
+      <%}else{%>
+      <button
+        type="button"
+        class="logging"
+        onclick="location.href = '/auth/login';"
+      >
+        login
+      </button>
+      <%}%>
       <a href="#">
         <div class="profile-icon">
           <img src="../img/profile-svgrepo-com.svg" alt="" /></div
@@ -32,6 +36,7 @@
     </div>
     <div class="container">
       <div class="title">TIC-TAC TOE</div>
+      <div class="turns" style="color: #f0f8ff">Your turn: X</div>
       <div class="announcer">
         <div class="winnner">
           <img src="img/circle.png" class="winner-img" />
@@ -52,33 +57,34 @@
         <button class="s32" id="square" onclick="makeMove(this)"></button>
         <button class="s33" id="square" onclick="makeMove(this)"></button>
       </div>
+
+      <%if (user) {%>
       <div class="invite-poppup">
-        <p class="invite-txt">Invite a friend</p>
+        <p class="invite-txt">Find a friend to play</p>
 
         <div class="invite-box">
-          <label for="usernameBox" class="invite-username">Username</label>
-          <input type="text" class="username-box" id="usernameBox" />
           <button
             type="button"
-            class="invite-btn"
-            id="invite-btn"
-            onclick="invitePlayer()"
+            class="search-btn"
+            id="search-btn"
+            onclick="search()"
           >
-            invite
+            Search
           </button>
+          <div class="spin">
+            <div class="spinner"></div>
+          </div>
+
+          <p class="opponent">
+            You are playing <span class="opp-username">Opponent</span>
+          </p>
         </div>
-        <p class="username-flag">Player not found</p>
       </div>
+      <%}%>
     </div>
+    <script src="http://localhost:5001/socket.io/socket.io.js"></script>
+    <script></script>
   </body>
-  <!-- <script type="importmap">
-    {
-      "imports": {
-        "socket.io-client": "https://cdn.socket.io/4.4.1/socket.io.esm.min.js"
-      }
-    }
-  </script>
-  <script type="module" src="/getSocket.js"></script>
-  <script src="/socket.io/socket.io.js"></script> -->
+
   <script src="/main.js"></script>
 </html>

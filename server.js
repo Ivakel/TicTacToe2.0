@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv").config();
 const User = require("./models/userModel");
+const Pool = require("./models/playersPool");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 const passportSetup = require("./config/passportAuth");
@@ -9,31 +10,67 @@ const cookieSession = require("cookie-session");
 const initialisePassport = require("./config/passportLocal");
 const flash = require("express-flash");
 const session = require("express-session");
+const app = express();
+const http = require("http");
+const server = http.createServer(app);
 const io = require("socket.io")(5001, {
   cors: {
-    origin: ["http://localhost:8080"],
+    origins: ["http://localhost:8080"],
   },
 });
 
 io.on("connection", (socket) => {
-  console.log(`Connected to ${socket.id}`);
+  socket.on("find", async (player) => {
+    Pool.findOne({ _id: process.env.PLAYERS_ID }).then((players) => {
+      // let pool = players.pool;
+      // pool.push(player);
+      players.pool.push(player);
+
+      if (players.pool.length > 1) {
+        const [p1, p2] = players.pool.slice(0, 2);
+
+        const player1 = {
+          socketId: p1.socketId,
+          sign: "x",
+          turn: 1,
+          username: p1.username,
+        };
+
+        const player2 = {
+          socketId: p2.socketId,
+          sign: "o",
+          turn: 0,
+          username: p2.username,
+        };
+
+        const remaining = players.pool.slice(2, players.pool.length); // getting the remaining unpaired players
+        players.pool = remaining;
+        players.save(); //saving the remaining unpaired players
+        // console.log(player1.socketId);
+        // console.log(player2.socketId);
+
+        socket.emit("send-opponent", {
+          opponent: player2,
+          socketId: player1.socketId,
+        });
+        socket.emit("send-opponent", {
+          opponent: player1,
+          socketId: player2.socketId,
+        });
+      } else {
+        players.save();
+      }
+    });
+  });
 });
 
-//Do the login/logout
-const app = express();
+let playerPool = null;
 
 app.set("views", __dirname + "/views");
 app.use(express.static(__dirname + "/public"));
 
 app.engine("html", require("ejs").renderFile);
 app.set("view engine", "ejs");
-
-// app.use(
-//   cookieSession({
-//     maxAge: 24 * 60 * 60 * 1000,
-//     keys: [process.env.COOKIE_SESSION_KEY],
-//   })
-// );
 
 app.use(
   session({
@@ -68,17 +105,16 @@ app.get(
   }
 );
 
-// app.get("/", authCheck, (req, res) => {
-//   res.render("index.ejs", { user: req.user });
-// });
-
 app.get("/", (req, res) => {
-  res.render("index.ejs", { user: req.user });
+  const user = req.user;
+
+  res.render("index.ejs", { user: user });
 });
 
 app.get("/logout", (req, res) => {
-  req.logout();
-  res.redirect("/");
+  req.logout(() => {
+    res.redirect("/");
+  });
 });
 
 //signup server
@@ -102,7 +138,7 @@ app.post("/auth/signup", async (req, res) => {
   const email = req.body.email;
   const username = req.body.username;
   const password = req.body.password;
-  const hashedPW = await bcrypt(password, 10);
+  const hashedPW = await bcrypt.hash(password, 10);
 
   try {
     new User({
@@ -125,6 +161,18 @@ function checkAuthentication(req, res, next) {
   }
 }
 
+function getUsername(email) {
+  let username = "";
+
+  for (let i = 0; i < email.length; i++) {
+    if (email[i] === "@") {
+      return username;
+    }
+    username += email[i];
+  }
+  return username;
+}
+
 function checkNotAuthentication(req, res, next) {
   if (req.isAuthenticated()) {
     res.redirect("/");
@@ -140,7 +188,8 @@ mongoose
   )
   .then(() => {
     console.log("Connected to MongoDB");
-    app.listen(port, () => {
+
+    server.listen(port, () => {
       console.log(`Server running on port ${port}`);
     });
   })

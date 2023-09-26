@@ -1,5 +1,6 @@
 {
   "name": "public",
+  "type": "module",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -8,8 +9,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "socket.io-client": "^4.7.2"
-  }
+  "license": "ISC"
 }

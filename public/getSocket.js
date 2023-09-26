@@ -1,3 +1,9 @@
-import { io } from "socket.io-client";
-
-export const socket = io("http://localhost:5001");
+function makeMove(el) {
+  if (multiplayer) {
+    if (!canMakeMove) {
+      return;
+    }
+  }
+  makeMoveOnApp(el);
+  console.log("this");
+}
